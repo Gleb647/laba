@@ -1,0 +1,82 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <string>
+#include <cstdlib>
+
+
+using namespace std;
+
+
+int main() {
+	double  D, root1, root2;
+
+	char info;
+	int a, b, c;
+	char* a1 = new char[4];
+	char* b1 = new char[4];
+	char* c1 = new char[4];
+	char x2[] = {'x','*','x','\0'};
+	char x1[] = {'x','\0'};
+	char pos1[] = { '+','\0' };
+	char pos2[] = { '-','\0' };
+	char* pos11 = pos1;
+	char* pos22 = pos2;
+	char* x11 = x1;
+	char* x22 = x2;
+	char* ptr = &info;
+	cout << "Enter a : ";
+	cin >> a;
+	cout << endl;
+	cout << "Enter b : ";
+	cin >> b;
+	cout << endl;
+	cout << "Enter c : ";
+	cin >> c;
+	cout << endl;
+	_itoa(a, a1, 10);
+	_itoa(b, b1, 10);
+	_itoa(c, c1, 10);
+	ptr = strcat(a1,x22);
+
+	if (b > 0) {
+		ptr = strcat(ptr, pos11);
+		ptr = strcat(ptr, b1);
+	}
+	else if (b < 0) {
+		ptr = strcat(ptr, b1);
+	}
+
+	ptr = strcat(ptr, x11);
+
+	if (c > 0) {
+		ptr = strcat(ptr, pos11);
+		ptr = strcat(ptr, c1);
+	}
+	else if (c < 0) {
+		ptr = strcat(ptr, c1);
+	}
+	cout.width(10);
+	cout << setfill('#') << ptr << endl;
+	cout <<  endl;
+
+
+	D = b * b - 4 * a * c;
+
+	if (D > 0) {
+		root1 = (-b + sqrt(D)) / (2 * a);
+		cout << setprecision(4) << "first root is " << root1 << endl;
+		root2 = (-b - sqrt(D)) / (2 * a);
+		cout << setprecision(4) << "second root is " << root2 << endl;
+	}
+
+	else if (D == 0) {
+		root1 = -b / (2 * a);
+		cout << setprecision(4) << "root is " << root1 << endl;
+	}
+
+	else if (D < 0) {
+		cout << "entered equation has a negative discriminant" << endl;
+	}
