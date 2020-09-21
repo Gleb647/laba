@@ -7,12 +7,11 @@ using namespace std;
 
 class motorbike {
 	friend class holder;
-	friend void get(motorbike & bike);
+	friend void get(motorbike& bike);
 private:
 	int id;
 	string name;
 	int mileage;
-
 
 public:
 	motorbike() : id(0), mileage(0), name(" ") {
@@ -25,14 +24,29 @@ public:
 	}
 	~motorbike() {
 	}
-
 };
 
-void get(motorbike & bike) {
+void get(motorbike& bike) {
 	cout << bike.id << "---" << bike.name << "---" << bike.mileage << endl;
 }
 
-class holder{
+int check(){
+	while (1){
+		int data;
+		cin >> data;
+		if (cin.fail()){
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Повторите попытку!"<< endl;
+		}
+		else{
+			cin.ignore(32767, '\n');
+			return data;
+		}
+	}
+}
+
+class holder {
 public:
 	holder() {
 
@@ -40,7 +54,7 @@ public:
 	~holder() {
 
 	}
-	void set(motorbike & bike, int data) {
+	void set(motorbike& bike, int data) {
 		bike.mileage = data;
 	}
 };
@@ -66,7 +80,7 @@ void main() {
 		cin >> real_mileage;
 		ptr[i] = { ID, real_mileage, real_name };
 		cout << endl;
-		cout <<  "======================================="  << endl;;
+		cout << "=======================================" << endl;;
 		cout << endl;
 	}
 
@@ -74,16 +88,15 @@ void main() {
 		get(ptr[i]);
 	}
 	cout << endl;
+
 	for (int i = 0; i < amount; i++) {
-		cout << "Введите сброшенный пробег "<< i+1 << " мотоцикла :";
-		cin >> data;
-		cout << endl;
-		if (data > real_mileage) {
-			cout << "недопустимое значение (значение для "<< i+1 <<" мотоцикла не будет изменено)" << endl;
-		}
-		else h.set(ptr[i],data);
+		cout << "Введите изменённый пробег " << i + 1 << " мотоцикла :";
+		data = check();
+		h.set(ptr[i], data);
 	}
+
 	cout << endl;
+
 	for (int i = 0; i < amount; i++) {
 		get(ptr[i]);
 	}
