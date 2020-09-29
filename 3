@@ -1,0 +1,192 @@
+#include <iostream>
+#include <string>
+#include <locale.h>
+
+using namespace std;
+
+
+	class matrix{
+	private:
+		double** ms;
+		int height;
+		int width;
+	public:
+		matrix() {
+			height = 1;
+			width = 1;
+			ms = new double*[width];
+			for (int i = 0; i < width; i++) {
+				ms[i] = new double[height];
+			}
+		}
+		matrix(int set_height, int set_width) {
+			ms = new double* [set_width];
+			for (int i = 0; i < set_width; i++) {
+				ms[i] = new double[set_height];
+			}
+			height = set_height;
+			width = set_width;
+		}
+
+		matrix(const matrix& m) {
+			height = m.height;
+			width = m.width;
+			ms = new double*[width];
+			for (int i = 0; i < width; i++) {
+				ms[i] = new double[height];
+			}
+			for (int i = 0; i < width; i++)
+			{
+				for (int j = 0; j < height; j++) {
+					ms[i][j] = m.ms[i][j];
+				}
+			}
+		}
+
+
+
+		~matrix() {
+			for (int i = 0; i < width; i++) {
+				delete[] ms[i];
+			}
+			delete[] ms;
+		}
+
+		void set() {
+			double num;
+			for (int i = 0; i < this->width; i++)
+			{
+				for (int j = 0; j < this->height; j++) {
+					cout << "Enter (" << i << "," << j << ") element" << endl;
+					cin >> num;
+					this->ms[i][j] = num;
+				}
+			}
+		}
+
+
+		void show() {
+			for (int i = 0; i < width; i++)
+			{
+				for (int j = 0; j < height; j++) {
+					cout << "\t" <<ms[i][j] << " ";
+				}
+				cout << endl;
+			}
+		}
+
+		matrix operator+ (const matrix& other) {
+			if (this->width != other.width && this->height != other.height) {
+				return matrix();
+			}
+			else {
+				matrix m3(width,height);
+				for (int i = 0; i < width; i++){
+					for (int j = 0; j < height; j++) {
+						m3.ms[i][j] = this->ms[i][j] + other.ms[i][j];
+					}
+				}
+				return m3;
+			}
+		}
+
+		matrix operator- (const matrix& other) {
+			if (this->width != other.width && this->height != other.height) {
+				return matrix();
+			}
+			else {
+				matrix m3(width, height);
+				for (int i = 0; i < width; i++){
+					for (int j = 0; j < height; j++) {
+						m3.ms[i][j] = this->ms[i][j] - other.ms[i][j];
+					}
+				}
+				return m3;
+			}
+		}
+
+		double* operator[](const int i){
+			return ms[i];
+		}
+
+		void setSize(int width, int height) {
+			this->width = width;
+			this->height = height;
+		}
+
+		friend matrix& operator++(matrix& m3);
+	};
+
+	matrix& operator++ (matrix& m3) {
+		for (int i = 0; i < m3.width; i++) {
+			for (int j = 0; j < m3.height; j++) {
+				m3.ms[i][j] += 1;
+			}
+		}
+		return m3;
+	}
+
+
+	int main() {
+		int n, n1, n2, operation_dig;
+		bool menu = true;
+		matrix* ptr;
+		cout << "Enter matr width :";
+		cin >> n1;
+		cout << endl;
+		cout << "Enter matr hieght :";
+		cin >> n2;
+		cout << endl;
+		while (menu) {
+			cout << "Choose operation u wanna execute ('1' for 2 matrix , '2' for massive of matrices) : ";
+			cin >> operation_dig;
+			cout << endl;
+			switch (operation_dig) {
+			case 1: {
+				matrix m1(n1, n2);
+				matrix m2(n1, n2);
+
+				m1.set();
+
+				cout << endl;
+
+				m2.set();
+				cout << endl;
+				cout << "First matrix :" << endl << endl;
+				m1.show();
+				cout << endl;
+				cout << "Second matrix :" << endl << endl;
+				m2.show();
+				matrix m3 = m1 + m2;
+				matrix ms_copy(m3);
+				cout << endl;
+				cout << "Sum matrix :" << endl << endl;
+				m3.show();
+				cout << endl;
+				++ms_copy;
+				cout << "Sum matrix increased by 1 :" << endl << endl;
+				ms_copy.show();
+				break;
+			}
+			case 2: {
+				cout << "enter amount of matr : ";
+				cin >> n;
+				ptr = new matrix[n];
+				for (int k = 0; k < n; k++) {
+					ptr[k].setSize(n1, n2);
+					ptr[k].set();
+				}
+
+				for (int k = 0; k < n; k++) {
+					ptr[k].show();
+				}
+
+				delete[] ptr;
+
+				break;
+
+			}
+			}
+		}
+			return 0;
+	}
