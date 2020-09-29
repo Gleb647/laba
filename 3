@@ -112,6 +112,17 @@ using namespace std;
 		void setSize(int width, int height) {
 			this->width = width;
 			this->height = height;
+
+			ms = new double* [width];
+			for (int i = 0; i < width; i++) {
+				ms[i] = new double[height];
+			}
+
+		}
+
+		int get_elem(int i, int j)
+		{
+			return ms[i][j];
 		}
 
 		friend matrix& operator++(matrix& m3);
@@ -179,6 +190,7 @@ using namespace std;
 
 				for (int k = 0; k < n; k++) {
 					ptr[k].show();
+					cout << endl;
 				}
 
 				delete[] ptr;
@@ -190,3 +202,5 @@ using namespace std;
 		}
 			return 0;
 	}
+
+
