@@ -1,0 +1,246 @@
+#include <iostream>
+
+using namespace std;
+
+class military_technics {
+
+public:
+	military_technics() : name("None"), hp(0) {
+
+	}
+
+	military_technics(string name, int hp) {
+		this->name = name;
+		this->hp = hp;
+	}
+
+	void show_military_technics() {
+		cout << "Name : " << name << endl << endl;
+		cout << "Hp : " << hp << endl << endl;
+	}
+
+	void set_name(string name){
+		this->name = name;
+	}
+
+	void set_hp(int hp){
+		this->hp = hp;
+	}
+
+	~military_technics() {
+
+	}
+
+
+private:
+
+	string name;
+	int hp;
+
+};
+
+class Submarine : public virtual military_technics {
+
+public:
+
+	Submarine() : max_speed_on_earth(0), radio_range(0) {
+
+	}
+
+	Submarine(string name, int hp, double max_speed_on_earth, int radio_range) : military_technics(name, hp){
+		this->max_speed_on_earth = max_speed_on_earth;
+		this->radio_range = radio_range;
+	}
+
+	void show_Submarine() {
+		show_military_technics();
+		cout << "Max speed on earth : " << max_speed_on_earth << endl << endl;
+		cout << "Radio signal range : " << radio_range << endl << endl;
+	}
+
+	~Submarine() {
+
+	}
+
+private:
+	double max_speed_on_earth;
+	int radio_range;
+};
+
+class heavy_tank : public virtual military_technics {
+
+public:
+
+	heavy_tank() : damage(0), armor(0) {
+
+	}
+
+	heavy_tank(string name, int hp, double damage, int armor) : military_technics(name, hp) {
+		this->damage = damage;
+		this->armor = armor;
+	}
+
+	void show_heavy_tank() {
+		cout << "Damage : " << damage << endl << endl;
+		cout << "Armor : " << armor << endl << endl;
+	}
+
+	~heavy_tank() {
+
+	}
+
+private:
+	double damage;
+	int armor;
+};
+
+class infantry_tank : public heavy_tank {
+
+public:
+
+	infantry_tank() : weight(0), cooldown(0) {
+
+	}
+
+	infantry_tank(string name, int hp, double damage, int armor, int weight, double cooldown) : heavy_tank(name, hp, damage, armor) {
+		this->weight = weight;
+		this->cooldown = cooldown;
+	}
+
+	void show_infantry_tank() {
+		show_heavy_tank();
+		cout << "Weight : " << weight << endl << endl;
+		cout << "Weapon cooldown : " << cooldown << endl << endl;
+	}
+
+	~infantry_tank() {
+
+	}
+
+private:
+	int weight;
+	double cooldown;
+};
+
+class nuclear_submarine : public Submarine {
+	
+public:
+
+	nuclear_submarine() : amount_of_missles(0), number_of_turrets(0) {
+
+	}
+
+	nuclear_submarine(string name, int hp, double max_speed_on_earth, int radio_range, bool amount_of_missles, int number_of_turrets) : Submarine(name, hp, max_speed_on_earth, radio_range) {
+		this->amount_of_missles = amount_of_missles;
+		this->number_of_turrets = number_of_turrets;
+	}
+
+	void show_nuclear_submarine() {
+		show_Submarine();
+		cout << "Availability_of_missles : " << amount_of_missles << endl << endl;
+		cout << "Number of turrets : " << number_of_turrets << endl << endl;
+	}
+
+	~nuclear_submarine() {
+
+	}
+
+private:
+	bool amount_of_missles;
+	int number_of_turrets;
+};
+
+class amphibian_tank : public nuclear_submarine, public infantry_tank {
+
+public:
+	amphibian_tank(string name, int hp, double max_speed_on_earth, int radio_range, int amount_of_missles, int number_of_turrets, double damage, int armor, int weight, double cooldown, double max_speed_on_water, int amount_of_shells)
+	:nuclear_submarine(name, hp, max_speed_on_earth, radio_range, amount_of_missles, number_of_turrets), infantry_tank(name, hp, damage, armor, weight, cooldown){
+		this->max_speed_on_water = max_speed_on_water;
+		this->amount_of_shells = amount_of_shells;
+	}
+
+	void show_amphibian_tank() {
+		show_nuclear_submarine();
+		show_infantry_tank();
+		cout << "Max speed on water : " << max_speed_on_water << endl << endl;
+		cout << "Amount of shells : " << amount_of_shells << endl << endl;
+	}
+
+private:
+	double max_speed_on_water;
+	int amount_of_shells;
+}; 
+
+int check_int() {
+	while (1) {
+		int data;
+		cin >> data;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Incorrect information. Try again!" << endl;
+		}
+		else {
+			cin.ignore(32767, '\n');
+			return data;
+		}
+	}
+}
+
+double check_double() {
+	while (1) {
+		double data;
+		cin >> data;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Incorrect information. Try again!" << endl;
+		}
+		else {
+			cin.ignore(32767, '\n');
+			return data;
+		}
+	}
+}
+
+
+
+int main() {
+	string name;
+	int hp, radio_range, number_of_turrets, weight, armor, amount_of_shells;
+	double max_speed_on_earth, cooldown, damage, max_speed_on_water;
+	bool availability_of_missles;
+
+	cout << "Enter technics name :";
+	cin >> name;
+	cout << "Enter technics hitpoints :";
+	hp = check_int();
+	cout << "Enter technics radio signal range :";
+	radio_range = check_int();
+	cout << "Enter technics number of turrets :";
+	number_of_turrets = check_int();
+	cout << "Enter technics weight :";
+	weight = check_int(); 
+	cout << "Enter technics armor :";
+	armor = check_int();
+	cout << "Enter technics amount of shells :";
+	amount_of_shells = check_int();
+	cout << "Enter technics max speed on earth :";
+	max_speed_on_earth = check_double();
+	cout << "Enter technics weapon cooldown :";
+	cooldown = check_double();
+	cout << "Enter technics weapon damage :";
+	damage = check_double();
+	cout << "Enter technics max speed on water :";
+	max_speed_on_water = check_double();
+	cout << "Enter technics availability of missles :";
+	cin >> availability_of_missles;
+
+	system("cls");
+
+	amphibian_tank t(name, hp, max_speed_on_earth, radio_range, availability_of_missles, number_of_turrets, damage, armor, weight, cooldown, max_speed_on_water, amount_of_shells);
+	t.set_name(name);
+	t.set_hp(hp);
+	t.show_amphibian_tank();
+	return 0;
+}
