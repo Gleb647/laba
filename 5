@@ -1,0 +1,328 @@
+#include <iostream>
+#include <cmath>
+#include <typeinfo>
+#define g 9.8
+#define pi 3.14159265
+
+using namespace std;
+
+class military_technics {
+
+public:
+	military_technics() : bullet_speed(0), angle(0) {
+
+	}
+
+	military_technics(int bullet_speed, int angle) {
+		this->bullet_speed = bullet_speed;
+		this->angle = angle;
+	}
+
+	virtual void show_military_technics() {
+		cout << "angle : " << angle << endl << endl;
+		cout << "bullet_speed : " << bullet_speed << endl << endl;
+	}
+
+	virtual void projectile_range(){		
+		double data =  0;
+		cout << data << endl;
+	}
+
+	void setangle(int inputAngle) {
+		angle = inputAngle;
+	}
+
+	void setbullet_speed(int inputBulletSpeed) {
+		bullet_speed = inputBulletSpeed;
+	}
+	
+	int getAngle() {
+		return angle;
+	}
+
+	int getBulletSpeed() {
+		return bullet_speed;
+	}
+
+	virtual ~military_technics() {
+
+	}
+
+
+protected:
+
+	int angle;
+	int bullet_speed;
+
+};
+
+class Submarine : public virtual military_technics {
+
+public:
+
+	Submarine() : water_deceleration(0) {
+
+	}
+
+	Submarine(int bullet_speed, int angle, float water_deceleration) : military_technics(angle, bullet_speed) {
+		this->water_deceleration = water_deceleration;
+
+	}
+
+	void show_military_technics() {
+		cout << "bullet_speed : " << bullet_speed << endl << endl;
+		cout << "angle : " << angle << endl << endl;
+		cout << "water_deceleration : " << water_deceleration << endl << endl;
+	}
+
+	void projectile_range(int bullet_speed, int angle, float water_deceleration) {
+		double data =  water_deceleration * bullet_speed * bullet_speed * sin(2 * angle * pi / 180) / g ;
+		cout << data << endl;
+	}
+
+	void setWaterDeceleration(float inputWaterDeceleration) {
+		water_deceleration = inputWaterDeceleration;
+	}
+
+	float getWaterDeceleration() {
+		return water_deceleration;
+	}
+
+	~Submarine() {
+
+	}
+
+private:
+
+	float water_deceleration;
+
+};
+
+class heavy_tank : public virtual military_technics {
+
+public:
+
+	heavy_tank() : air_deceleration(0) {
+
+	}
+
+	heavy_tank(int bullet_speed, int angle, float air_deceleration) : military_technics(bullet_speed, angle) {
+		this->air_deceleration = air_deceleration;
+	}
+
+	void show_military_technics() {
+		cout << "bullet_speed : " << bullet_speed << endl << endl;
+		cout << "air_deceleration : " << air_deceleration << endl << endl;
+	}
+
+	void projectile_range(int bullet_speed, double air_deceleration) {
+		double data = (air_deceleration * bullet_speed * bullet_speed) / g;
+		cout << data << endl;
+	}
+
+	void setAirDeceleration(float inputAirDeceleration) {
+		air_deceleration = inputAirDeceleration;
+	}
+
+	double getAirDeceleration() {
+		return air_deceleration;
+	}
+
+	~heavy_tank() {
+
+	}
+
+protected:
+
+	double air_deceleration;
+
+};
+
+class infantry_tank : public heavy_tank {
+
+public:
+
+	infantry_tank() : acceleration(0){
+
+	}
+
+	infantry_tank(int bullet_speed, int angle, float air_deceleration, int acceleration) : heavy_tank(bullet_speed, angle, air_deceleration) {
+		this->air_deceleration = air_deceleration;
+		this->acceleration = acceleration;
+	}
+
+	void show_military_technics() {
+		cout << "bullet_speed : " << bullet_speed << endl << endl;
+		cout << "angle : " << angle << endl << endl;
+		cout << "air_deceleration : " << air_deceleration << endl << endl;
+		cout << "acceleration : " << acceleration << endl << endl;
+	}
+
+	void projectile_range(int bullet_speed, int angle, float air_deceleration, int acceleration) {
+		double data = (air_deceleration * acceleration * bullet_speed * bullet_speed * sin(2 * angle * pi / 180)) / g;
+		cout << data << endl;
+	}
+
+	void setAcceleration(int inputAcceleration) {
+		acceleration = inputAcceleration;
+	}
+
+	void setAirDeceleration(float AirDecekeration) {
+		air_deceleration = AirDecekeration;
+	}
+
+	int getAcceleration() {
+		return acceleration;
+	}
+
+	double getAirDeceleration() {
+		return air_deceleration;
+	}
+
+	~infantry_tank() {
+
+	}
+
+private:
+
+	int acceleration;
+};
+
+
+int check_int() {
+	while (1) {
+		int data;
+		cin >> data;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Incorrect information. Try again!" << endl;
+		}
+		else {
+			cin.ignore(32767, '\n');
+			return data;
+		}
+	}
+}
+
+int check_float() {
+	while (1) {
+		float data;
+		cin >> data;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Incorrect information. Try again!" << endl;
+		}
+		else {
+			cin.ignore(32767, '\n');
+			return data;
+		}
+	}
+}
+
+
+void setMilitaryTechnics(military_technics* m) {
+	int angle, bullet_speed;
+	cout << "Angle : ";
+	angle = check_int();
+	m->setangle(angle);
+	cout << "Bullet speed : ";
+	bullet_speed = check_int();
+	m->setbullet_speed(bullet_speed);
+}
+
+void setSubmarine(military_technics* m) {
+	Submarine* s =  dynamic_cast<Submarine*> (m);
+	int bullet_speed;
+	int submarineAngle;
+	float water_deceleration;
+	setMilitaryTechnics(s);
+	bullet_speed = s->getBulletSpeed();
+	submarineAngle = s->getAngle();
+	cout << "Water deceleration : ";
+	water_deceleration = check_float();
+	s->setWaterDeceleration(water_deceleration);
+	s->projectile_range(bullet_speed, submarineAngle, water_deceleration);
+	
+}
+
+
+void setMilitaryTechnicsWithoutAngle(military_technics* m) {
+	int bullet_speed;
+	cout << "Bullet speed : ";
+	bullet_speed = check_int();
+	m->setbullet_speed(bullet_speed);
+}
+
+void setHeavy(military_technics* m) {
+	float air_deceleration;
+	int bullet_speed;
+	heavy_tank* h = dynamic_cast<heavy_tank*> (m);
+	setMilitaryTechnicsWithoutAngle(h);
+	bullet_speed = h->getBulletSpeed();	
+	cout << "Air deceleration : ";
+	air_deceleration = check_float();
+	h->setAirDeceleration(air_deceleration);
+	h->projectile_range(bullet_speed, air_deceleration);
+}
+
+void setInfantry(military_technics* m) {
+	int acceleration, bullet_speed, angle;
+	float air_deceleration;
+	infantry_tank* h = dynamic_cast<infantry_tank*> (m);
+	setMilitaryTechnics(h);
+	bullet_speed = h->getBulletSpeed();
+	angle = h->getAngle();
+	cout << "Acceleration : ";
+	acceleration = check_int();
+	h->setAcceleration(acceleration);
+	cout << "Air deceleration : ";
+	air_deceleration = check_float();
+	h->setAirDeceleration(air_deceleration);
+	h->projectile_range(bullet_speed, angle, air_deceleration, acceleration);
+}
+
+
+void f1(){
+}
+
+int main() {
+	military_technics** ptr_mil;
+	military_technics* m;
+
+	Submarine* sub_ptr = new Submarine;
+	
+	heavy_tank* heav_ptr = new heavy_tank;
+	
+	infantry_tank* infa_ptr = new infantry_tank;
+	
+	ptr_mil = new military_technics * [3];
+	ptr_mil[0] = sub_ptr;
+	ptr_mil[1] = heav_ptr;
+	ptr_mil[2] = infa_ptr;
+
+	
+	setSubmarine(ptr_mil[0]);
+	
+	setHeavy(ptr_mil[1]);
+
+	setInfantry(ptr_mil[2]);
+	
+
+	for (int i = 0; i < 3; i++) {
+		cout << "=========== #"<< i+1 <<"object characteristx =============" << endl << endl;
+		ptr_mil[i]->show_military_technics();
+	}
+	cout << "==============================================" << endl;
+
+	for (int i = 0; i < 3; i++) {
+		delete ptr_mil[i];
+	}
+	delete[] ptr_mil;
+	delete sub_ptr;
+	delete heav_ptr;
+	delete infa_ptr;
+	
+	return 0;
+}
