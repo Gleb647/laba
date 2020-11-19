@@ -1,0 +1,151 @@
+#include <iostream>
+#include <time.h>
+
+using namespace std;
+
+template<class T>
+class matr {
+private:
+	T** mas;
+	int width;
+	int height;
+public:
+	matr() {
+		mas = 0, width = 0, height = 0;
+	}
+	matr(int h, int w) {
+		width = w;
+		height = h;
+		mas = new T*[w];
+		for (int i = 0; i < w; ++i) {
+			mas[i] = new T[h];
+		}
+	}
+
+
+	T GetMij(int i, int j)
+	{
+		if ((width > 0) && (height > 0))
+			return mas[i][j];
+		else
+			return 0;
+	}
+
+	void SetMij(int i, int j, T value)
+	{
+		if ((i < 0) || (i >= width))
+			return;
+		if ((j < 0) || (j >= height))
+			return;
+		mas[i][j] = value;
+	}
+
+	void Print(const char* ObjName)
+	{
+		cout << "Object: " << ObjName << endl;
+		for (int i = 0; i < width; ++i)
+		{
+			for (int j = 0; j < height; ++j)
+				cout << mas[i][j] << "\t";
+			cout << endl;
+		}
+		cout << "---------------------" << endl << endl;
+	}
+
+	void find(int width, int height, T value) {
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++) {
+				if (mas[i][j] == value) {
+					cout << mas[i][j] << " - found in [" << j << "][" << i << "]" << endl;
+				}
+			}
+		}
+	}
+	
+	void sort() {
+		for (int m = 0; m < width * height; ++m) {
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < height; j++) {
+					if (i + 1 == width && j + 1 == height) {
+						continue;
+					}
+
+					else {
+						if (j + 1 == height && mas[i][j] > mas[i + 1][0]) {
+							T buff = mas[i][j];
+							mas[i][j] = mas[i + 1][0];
+							mas[i + 1][0] = buff;
+						}
+
+						else {
+							if (j + 1 != height){
+								if (mas[i][j] > mas[i][j + 1]) {
+									T buff = mas[i][j];
+									mas[i][j] = mas[i][j + 1];
+									mas[i][j + 1] = buff;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	~matr() {
+
+		for (int i = 0; i < width ; ++i){
+			delete[] mas[i];
+		}
+		delete[] mas;
+	}
+};
+
+int main() {
+	int numInt;
+	char numChar;
+	int choice;
+	int width, height;
+	int i, j, k;
+	char alf[] = "abcdefghijklmnopqrstuvwxyz";
+	srand(time(0));
+	cout << "width : ";
+	cin >> width;
+	cout << endl;
+	cout << "height : ";
+	cin >> height;
+	cout << endl;
+	cout << "Enter 1 - for digit matrix or 2 - for symbol matrix";
+	cin >> choice;
+	cout << endl;
+	if (choice == 1) {
+		matr<int> m1(width, height);
+		for (i = 0; i < width; ++i) {
+			for (j = 0; j < height; ++j) {
+				m1.SetMij(i, j, rand() % 100);
+			}
+		}
+		m1.Print("m");
+		m1.sort();
+		m1.Print("m");
+		cin >> numInt;
+		m1.find(width, height, numInt);
+	}
+	else{
+		matr<char> m2(width, height);
+		for (i = 0; i < width; ++i) {
+			for (j = 0; j < height; ++j) {
+				k = rand() % 25;
+				m2.SetMij(i, j, alf[k]);
+			}
+		}
+		m2.Print("m");
+		m2.sort();
+		m2.Print("m");
+		cin >> numChar;
+		m2.find(width, height, numChar);
+	}
+	
+}
